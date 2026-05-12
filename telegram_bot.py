@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import time
 import json
 import os
@@ -12,10 +13,21 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 ARCHIVO_ENVIADAS = "noticias_enviadas_mexicali.json"
 
+TZ = ZoneInfo("America/Tijuana")
+
 FUENTES = [
-    {"nombre": "La Voz de la Frontera", "url": "https://www.lavozdelafrontera.com.mx/local/"},
-    {"nombre": "El Imparcial Mexicali", "url": "https://www.elimparcial.com/mexicali/"},
-    {"nombre": "La Crónica Mexicali", "url": "https://www.lacronica.com/mexicali/"}
+    {
+        "nombre": "La Voz de la Frontera",
+        "url": "https://www.lavozdelafrontera.com.mx/local/"
+    },
+    {
+        "nombre": "El Imparcial Mexicali",
+        "url": "https://www.elimparcial.com/mexicali/"
+    },
+    {
+        "nombre": "La Crónica Mexicali",
+        "url": "https://www.lacronica.com/mexicali/"
+    }
 ]
 
 HEADERS = {
@@ -27,18 +39,33 @@ HEADERS = {
 # ========================
 
 def limpiar_texto(texto):
-    texto = texto.lower()
-    texto = texto.replace("á", "a").replace("é", "e")
-    texto = texto.replace("í", "i").replace("ó", "o")
-    texto = texto.replace("ú", "u").replace("ñ", "n")
 
-    texto = re.sub(r"[^a-z0-9\s]", " ", texto)
-    texto = re.sub(r"\s+", " ", texto).strip()
+    texto = texto.lower()
+
+    texto = texto.replace("á", "a")
+    texto = texto.replace("é", "e")
+    texto = texto.replace("í", "i")
+    texto = texto.replace("ó", "o")
+    texto = texto.replace("ú", "u")
+    texto = texto.replace("ñ", "n")
+
+    texto = re.sub(
+        r"[^a-z0-9\s]",
+        " ",
+        texto
+    )
+
+    texto = re.sub(
+        r"\s+",
+        " ",
+        texto
+    ).strip()
 
     return texto
 
 
 def titulo_parecido(t1, t2):
+
     return SequenceMatcher(
         None,
         limpiar_texto(t1),
@@ -49,12 +76,14 @@ def titulo_parecido(t1, t2):
 def cargar_enviadas():
 
     if not os.path.exists(ARCHIVO_ENVIADAS):
+
         return {
             "links": [],
             "titulos": []
         }
 
     try:
+
         with open(
             ARCHIVO_ENVIADAS,
             "r",
@@ -64,6 +93,7 @@ def cargar_enviadas():
             return json.load(f)
 
     except:
+
         return {
             "links": [],
             "titulos": []
@@ -75,10 +105,14 @@ def guardar_enviada(noticia):
     data = cargar_enviadas()
 
     if noticia["link"] not in data["links"]:
-        data["links"].append(noticia["link"])
+        data["links"].append(
+            noticia["link"]
+        )
 
     if noticia["titulo"] not in data["titulos"]:
-        data["titulos"].append(noticia["titulo"])
+        data["titulos"].append(
+            noticia["titulo"]
+        )
 
     data["links"] = data["links"][-300:]
     data["titulos"] = data["titulos"][-300:]
@@ -110,6 +144,7 @@ def ya_fue_enviada(noticia):
             noticia["titulo"],
             titulo_guardado
         ):
+
             return True
 
     return False
@@ -119,7 +154,10 @@ def ya_fue_enviada(noticia):
 # FILTRO MEXICALI
 # ========================
 
-def es_noticia_mexicali(titulo, link):
+def es_noticia_mexicali(
+    titulo,
+    link
+):
 
     texto = limpiar_texto(
         titulo + " " + link
@@ -164,6 +202,7 @@ def eliminar_duplicados(lista):
         for existente in unicas:
 
             if noticia["link"] == existente["link"]:
+
                 repetida = True
                 break
 
@@ -171,6 +210,7 @@ def eliminar_duplicados(lista):
                 noticia["titulo"],
                 existente["titulo"]
             ):
+
                 repetida = True
                 break
 
@@ -194,7 +234,9 @@ def obtener_noticias():
 
         try:
 
-            print(f"Leyendo: {fuente['nombre']}")
+            print(
+                f"Leyendo: {fuente['nombre']}"
+            )
 
             r = requests.get(
                 fuente["url"],
@@ -221,7 +263,10 @@ def obtener_noticias():
 
                 href = item["href"]
 
-                if not titulo or len(titulo) < 30:
+                if (
+                    not titulo
+                    or len(titulo) < 30
+                ):
                     continue
 
                 if href.startswith("/"):
@@ -253,9 +298,14 @@ def obtener_noticias():
                 # EVITAR REPETIDOS
                 # ========================
 
-                if noticia["link"] in data_enviadas["links"]:
+                if (
+                    noticia["link"]
+                    in data_enviadas["links"]
+                ):
 
-                    print(f"REPETIDA LINK: {titulo}")
+                    print(
+                        f"REPETIDA LINK: {titulo}"
+                    )
 
                     continue
 
@@ -273,7 +323,9 @@ def obtener_noticias():
 
                 if repetida:
 
-                    print(f"REPETIDA TITULO: {titulo}")
+                    print(
+                        f"REPETIDA TITULO: {titulo}"
+                    )
 
                     continue
 
@@ -285,7 +337,9 @@ def obtener_noticias():
                 f"Error en {fuente['nombre']}: {e}"
             )
 
-    return eliminar_duplicados(noticias)
+    return eliminar_duplicados(
+        noticias
+    )
 
 
 # ========================
@@ -294,7 +348,10 @@ def obtener_noticias():
 
 def enviar_mensaje(texto):
 
-    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    url = (
+        f"https://api.telegram.org/bot"
+        f"{TOKEN}/sendMessage"
+    )
 
     response = requests.post(
         url,
@@ -309,7 +366,9 @@ def enviar_mensaje(texto):
     print(response.status_code)
     print(response.text)
 
-    return response.status_code == 200
+    return (
+        response.status_code == 200
+    )
 
 
 # ========================
@@ -318,7 +377,9 @@ def enviar_mensaje(texto):
 
 def main():
 
-    print("Buscando noticias de Mexicali...")
+    print(
+        "Buscando noticias de Mexicali..."
+    )
 
     noticias = obtener_noticias()
 
@@ -326,8 +387,13 @@ def main():
 
     for noticia in noticias:
 
-        if not ya_fue_enviada(noticia):
-            noticias_nuevas.append(noticia)
+        if not ya_fue_enviada(
+            noticia
+        ):
+
+            noticias_nuevas.append(
+                noticia
+            )
 
     noticias_a_enviar = noticias_nuevas[:10]
 
@@ -339,8 +405,10 @@ def main():
 
         return
 
-    ahora = datetime.now().strftime(
-        "%d/%m/%Y %H:%M"
+    ahora = datetime.now(
+        TZ
+    ).strftime(
+        "%d/%m/%Y %I:%M %p"
     )
 
     encabezado = (
@@ -349,7 +417,9 @@ def main():
         f"*Cobertura:* Noticias Recientes"
     )
 
-    enviar_mensaje(encabezado)
+    enviar_mensaje(
+        encabezado
+    )
 
     time.sleep(2)
 
@@ -369,6 +439,7 @@ def main():
         )
 
         if enviado:
+
             guardar_enviada(
                 noticia
             )
