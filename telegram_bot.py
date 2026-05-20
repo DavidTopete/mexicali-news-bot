@@ -67,24 +67,11 @@ def guardar_enviada(noticia):
     if noticia["titulo"] not in data["titulos"]:
         data["titulos"].append(noticia["titulo"])
 
-    data["links"] = data["links"][-300:]
-    data["titulos"] = data["titulos"][-300:]
+    data["links"] = data["links"][-500:]
+    data["titulos"] = data["titulos"][-500:]
 
     with open(ARCHIVO_ENVIADAS, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-
-
-def ya_fue_enviada(noticia):
-    data = cargar_enviadas()
-
-    if noticia["link"] in data["links"]:
-        return True
-
-    for titulo_guardado in data["titulos"]:
-        if titulo_parecido(noticia["titulo"], titulo_guardado):
-            return True
-
-    return False
 
 
 def es_noticia_mexicali(titulo, link):
@@ -167,6 +154,7 @@ def obtener_fecha_articulo(link):
 
             if meta and meta.get("content"):
                 fecha = convertir_fecha(meta.get("content"))
+
                 if fecha:
                     return fecha
 
@@ -178,17 +166,17 @@ def obtener_fecha_articulo(link):
 
             for fecha_texto in coincidencias:
                 fecha = convertir_fecha(fecha_texto)
+
                 if fecha:
                     return fecha
 
         return None
 
-    except Exception as e:
-        print(f"No se pudo leer fecha: {link} | {e}")
+    except:
         return None
 
 
-def es_de_hoy_o_ayer(noticia):
+def es_hoy_o_ayer(noticia):
     fecha = obtener_fecha_articulo(noticia["link"])
 
     hoy = datetime.now(TZ).date()
@@ -196,18 +184,8 @@ def es_de_hoy_o_ayer(noticia):
 
     if fecha:
         noticia["fecha"] = fecha
+        return fecha.date() in [hoy, ayer]
 
-        if fecha.date() in [hoy, ayer]:
-            return True
-
-        print(
-            f"OMITIDA POR FECHA FUERA DE RANGO: {noticia['titulo']} | "
-            f"{fecha.strftime('%d/%m/%Y %I:%M %p')}"
-        )
-
-        return False
-
-    print(f"SIN FECHA DETECTABLE, SE ACEPTA COMO PRINCIPAL: {noticia['titulo']}")
     return True
 
 
@@ -234,7 +212,6 @@ def eliminar_duplicados(lista):
 
 def obtener_noticias():
     noticias_finales = []
-    data_enviadas = cargar_enviadas()
 
     for orden_fuente, fuente in enumerate(FUENTES):
         noticias_fuente = []
@@ -271,20 +248,7 @@ def obtener_noticias():
                     "posicion": posicion
                 }
 
-                if noticia["link"] in data_enviadas["links"]:
-                    continue
-
-                repetida = False
-
-                for titulo_guardado in data_enviadas["titulos"]:
-                    if titulo_parecido(titulo, titulo_guardado):
-                        repetida = True
-                        break
-
-                if repetida:
-                    continue
-
-                if not es_de_hoy_o_ayer(noticia):
+                if not es_hoy_o_ayer(noticia):
                     continue
 
                 noticias_fuente.append(noticia)
@@ -297,7 +261,7 @@ def obtener_noticias():
         limite = LIMITE_POR_FUENTE.get(fuente["nombre"], 3)
         noticias_finales.extend(noticias_fuente[:limite])
 
-    return eliminar_duplicados(noticias_finales)
+    return noticias_finales
 
 
 def enviar_mensaje(texto):
@@ -320,18 +284,12 @@ def enviar_mensaje(texto):
 
 
 def main():
-    print("Buscando noticias de hoy y ayer en diarios de Mexicali...")
+    print("Buscando 10 noticias de Mexicali...")
 
-    noticias = obtener_noticias()
+    noticias_a_enviar = obtener_noticias()
 
-    noticias_nuevas = []
-
-    for noticia in noticias:
-        if not ya_fue_enviada(noticia):
-            noticias_nuevas.append(noticia)
-
-    if not noticias_nuevas:
-        print("No hay noticias nuevas para publicar. No se publica nada.")
+    if not noticias_a_enviar:
+        print("No hay noticias para publicar.")
         return
 
     ahora = datetime.now(TZ).strftime("%d/%m/%Y")
@@ -345,7 +303,7 @@ def main():
 
     time.sleep(2)
 
-    for noticia in noticias_nuevas:
+    for noticia in noticias_a_enviar:
         titulo = escapar_html(noticia["titulo"])
         fuente = escapar_html(noticia["fuente"])
         link = escapar_html(noticia["link"])
