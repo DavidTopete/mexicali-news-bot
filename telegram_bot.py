@@ -88,26 +88,45 @@ def ya_fue_enviada(noticia):
 def es_noticia_mexicali(titulo, link):
     texto = limpiar_texto(titulo + " " + link)
 
-    claves = [
+    claves_mexicali = [
         "mexicali",
         "valle de mexicali",
-        "calexico",
-        "garita",
-        "aduana",
-        "frontera",
-        "baja california",
-        "bc",
         "cachanilla",
         "palaco",
+        "calexico",
+        "nuevo mexicali",
         "pueblo nuevo",
-        "zona centro",
-        "progreso",
-        "policia",
-        "bomberos",
-        "fge"
+        "zona centro mexicali",
+        "garita mexicali",
+        "aduana mexicali"
     ]
 
-    return any(c in texto for c in claves)
+    excluir = [
+        "tijuana",
+        "ensenada",
+        "rosarito",
+        "tecate",
+        "san felipe",
+        "san quintin",
+        "sonora",
+        "hermosillo",
+        "slrc",
+        "san luis rio colorado",
+        "nogales",
+        "obregon",
+        "guaymas"
+    ]
+
+    for ciudad in excluir:
+        if ciudad in texto:
+            print(f"NO ES MEXICALI: {titulo}")
+            return False
+
+    if any(clave in texto for clave in claves_mexicali):
+        return True
+
+    print(f"NO CONTIENE MEXICALI: {titulo}")
+    return False
 
 
 def convertir_fecha(fecha_texto):
@@ -314,7 +333,7 @@ def main():
     noticias_a_enviar = noticias_nuevas[:10]
 
     if not noticias_a_enviar:
-        print("No hay noticias nuevas de hoy. No se publica nada.")
+        print("No hay noticias nuevas de Mexicali de hoy. No se publica nada.")
         return
 
     ahora = datetime.now(TZ).strftime("%d/%m/%Y %I:%M %p")
