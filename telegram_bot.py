@@ -67,11 +67,24 @@ def guardar_enviada(noticia):
     if noticia["titulo"] not in data["titulos"]:
         data["titulos"].append(noticia["titulo"])
 
-    data["links"] = data["links"][-500:]
-    data["titulos"] = data["titulos"][-500:]
+    data["links"] = data["links"][-1000:]
+    data["titulos"] = data["titulos"][-1000:]
 
     with open(ARCHIVO_ENVIADAS, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def ya_fue_enviada(noticia):
+    data = cargar_enviadas()
+
+    if noticia["link"] in data["links"]:
+        return True
+
+    for titulo_guardado in data["titulos"]:
+        if titulo_parecido(noticia["titulo"], titulo_guardado):
+            return True
+
+    return False
 
 
 def es_noticia_mexicali(titulo, link):
@@ -154,7 +167,6 @@ def obtener_fecha_articulo(link):
 
             if meta and meta.get("content"):
                 fecha = convertir_fecha(meta.get("content"))
-
                 if fecha:
                     return fecha
 
@@ -166,7 +178,6 @@ def obtener_fecha_articulo(link):
 
             for fecha_texto in coincidencias:
                 fecha = convertir_fecha(fecha_texto)
-
                 if fecha:
                     return fecha
 
@@ -248,6 +259,10 @@ def obtener_noticias():
                     "posicion": posicion
                 }
 
+                if ya_fue_enviada(noticia):
+                    print(f"REPETIDA, SE OMITE: {titulo}")
+                    continue
+
                 if not es_hoy_o_ayer(noticia):
                     continue
 
@@ -261,7 +276,7 @@ def obtener_noticias():
         limite = LIMITE_POR_FUENTE.get(fuente["nombre"], 3)
         noticias_finales.extend(noticias_fuente[:limite])
 
-    return noticias_finales
+    return eliminar_duplicados(noticias_finales)
 
 
 def enviar_mensaje(texto):
@@ -284,12 +299,12 @@ def enviar_mensaje(texto):
 
 
 def main():
-    print("Buscando 10 noticias de Mexicali...")
+    print("Buscando noticias nuevas de Mexicali...")
 
     noticias_a_enviar = obtener_noticias()
 
     if not noticias_a_enviar:
-        print("No hay noticias para publicar.")
+        print("No hay noticias nuevas para publicar.")
         return
 
     ahora = datetime.now(TZ).strftime("%d/%m/%Y")
