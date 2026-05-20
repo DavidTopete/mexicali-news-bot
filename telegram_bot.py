@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import time
 import json
@@ -188,20 +188,23 @@ def obtener_fecha_articulo(link):
         return None
 
 
-def es_publicada_hoy_o_principal(noticia):
+def es_de_hoy_o_ayer(noticia):
     fecha = obtener_fecha_articulo(noticia["link"])
+
     hoy = datetime.now(TZ).date()
+    ayer = hoy - timedelta(days=1)
 
     if fecha:
         noticia["fecha"] = fecha
 
-        if fecha.date() == hoy:
+        if fecha.date() in [hoy, ayer]:
             return True
 
         print(
-            f"OMITIDA POR FECHA VIEJA: {noticia['titulo']} | "
+            f"OMITIDA POR FECHA FUERA DE RANGO: {noticia['titulo']} | "
             f"{fecha.strftime('%d/%m/%Y %I:%M %p')}"
         )
+
         return False
 
     print(f"SIN FECHA DETECTABLE, SE ACEPTA COMO PRINCIPAL: {noticia['titulo']}")
@@ -281,7 +284,7 @@ def obtener_noticias():
                 if repetida:
                     continue
 
-                if not es_publicada_hoy_o_principal(noticia):
+                if not es_de_hoy_o_ayer(noticia):
                     continue
 
                 noticias_fuente.append(noticia)
@@ -317,7 +320,7 @@ def enviar_mensaje(texto):
 
 
 def main():
-    print("Buscando noticias publicadas hoy en diarios de Mexicali...")
+    print("Buscando noticias de hoy y ayer en diarios de Mexicali...")
 
     noticias = obtener_noticias()
 
