@@ -158,8 +158,10 @@ def obtener_fecha_articulo(link):
 
         for meta_info in metas:
             meta = soup.find("meta", meta_info)
+
             if meta and meta.get("content"):
                 fecha = convertir_fecha(meta.get("content"))
+
                 if fecha:
                     return fecha
 
@@ -175,6 +177,7 @@ def obtener_fecha_articulo(link):
 
             for fecha_texto in coincidencias:
                 fecha = convertir_fecha(fecha_texto)
+
                 if fecha:
                     return fecha
 
@@ -333,24 +336,24 @@ def main():
         print("No hay noticias nuevas para publicar. No se publica nada.")
         return
 
-    ahora = datetime.now(TZ).strftime("%d/%m/%Y %I:%M %p")
+    ahora = datetime.now(TZ).strftime("%d/%m/%Y")
 
     encabezado = (
         f"<b>MEXICALI NOTICIAS</b>\n"
-        f"<b>Fecha y hora:</b> {ahora}\n"
-        f"<b>Cobertura:</b> Principales noticias publicadas hoy"
+        f"<b>Fecha:</b> {ahora}"
     )
 
     enviar_mensaje(encabezado)
+
     time.sleep(2)
 
-    for i, noticia in enumerate(noticias_a_enviar, 1):
+    for noticia in noticias_a_enviar:
         titulo = escapar_html(noticia["titulo"])
         fuente = escapar_html(noticia["fuente"])
         link = escapar_html(noticia["link"])
 
         mensaje = (
-            f"<b>{i}. {titulo}</b>\n"
+            f"<b>{titulo}</b>\n"
             f"Fuente: {fuente}\n"
             f"Link: {link}"
         )
