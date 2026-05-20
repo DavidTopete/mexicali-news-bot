@@ -34,11 +34,7 @@ def limpiar_texto(texto):
 
 
 def escapar_html(texto):
-    return (
-        texto.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-    )
+    return texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def titulo_parecido(t1, t2):
@@ -122,11 +118,7 @@ def es_noticia_mexicali(titulo, link):
             print(f"NO ES MEXICALI: {titulo}")
             return False
 
-    if any(clave in texto for clave in claves_mexicali):
-        return True
-
-    print(f"NO CONTIENE MEXICALI: {titulo}")
-    return False
+    return any(clave in texto for clave in claves_mexicali)
 
 
 def convertir_fecha(fecha_texto):
@@ -179,11 +171,7 @@ def obtener_fecha_articulo(link):
 
         for script in scripts:
             texto = script.get_text(" ", strip=True)
-
-            coincidencias = re.findall(
-                r'"datePublished"\s*:\s*"([^"]+)"',
-                texto
-            )
+            coincidencias = re.findall(r'"datePublished"\s*:\s*"([^"]+)"', texto)
 
             for fecha_texto in coincidencias:
                 fecha = convertir_fecha(fecha_texto)
@@ -208,6 +196,7 @@ def es_de_hoy(noticia):
     hoy_mexicali = datetime.now(TZ).date()
 
     if fecha_articulo.date() == hoy_mexicali:
+        noticia["fecha"] = fecha_articulo
         return True
 
     print(
@@ -243,15 +232,16 @@ def obtener_noticias():
     noticias = []
     data_enviadas = cargar_enviadas()
 
-    for fuente in FUENTES:
+    for orden_fuente, fuente in enumerate(FUENTES):
         try:
-            print(f"Leyendo: {fuente['nombre']}")
+            print(f"Leyendo principales noticias de: {fuente['nombre']}")
 
             r = requests.get(fuente["url"], headers=HEADERS, timeout=10)
             soup = BeautifulSoup(r.text, "html.parser")
+
             links = soup.find_all("a", href=True)
 
-            for item in links:
+            for posicion, item in enumerate(links):
                 titulo = item.get_text(" ", strip=True)
                 href = item["href"]
 
@@ -271,7 +261,9 @@ def obtener_noticias():
                 noticia = {
                     "titulo": titulo,
                     "link": href,
-                    "fuente": fuente["nombre"]
+                    "fuente": fuente["nombre"],
+                    "orden_fuente": orden_fuente,
+                    "posicion": posicion
                 }
 
                 if noticia["link"] in data_enviadas["links"]:
@@ -297,7 +289,16 @@ def obtener_noticias():
         except Exception as e:
             print(f"Error en {fuente['nombre']}: {e}")
 
-    return eliminar_duplicados(noticias)
+    noticias = eliminar_duplicados(noticias)
+
+    noticias.sort(
+        key=lambda n: (
+            n["orden_fuente"],
+            n["posicion"]
+        )
+    )
+
+    return noticias
 
 
 def enviar_mensaje(texto):
@@ -320,7 +321,7 @@ def enviar_mensaje(texto):
 
 
 def main():
-    print("Buscando noticias de Mexicali del día actual...")
+    print("Buscando principales noticias de Mexicali del día actual...")
 
     noticias = obtener_noticias()
 
@@ -333,7 +334,7 @@ def main():
     noticias_a_enviar = noticias_nuevas[:10]
 
     if not noticias_a_enviar:
-        print("No hay noticias nuevas de Mexicali de hoy. No se publica nada.")
+        print("No hay principales noticias nuevas de Mexicali de hoy. No se publica nada.")
         return
 
     ahora = datetime.now(TZ).strftime("%d/%m/%Y %I:%M %p")
@@ -341,7 +342,7 @@ def main():
     encabezado = (
         f"<b>MEXICALI NOTICIAS</b>\n"
         f"<b>Fecha y hora:</b> {ahora}\n"
-        f"<b>Cobertura:</b> Noticias de hoy"
+        f"<b>Cobertura:</b> Principales noticias de hoy"
     )
 
     enviar_mensaje(encabezado)
