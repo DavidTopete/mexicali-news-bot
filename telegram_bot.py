@@ -92,9 +92,9 @@ def es_noticia_mexicali(titulo, link):
         "calexico",
         "nuevo mexicali",
         "pueblo nuevo",
-        "zona centro mexicali",
-        "garita mexicali",
-        "aduana mexicali"
+        "zona centro",
+        "garita",
+        "aduana"
     ]
 
     excluir = [
@@ -104,7 +104,6 @@ def es_noticia_mexicali(titulo, link):
         "tecate",
         "san felipe",
         "san quintin",
-        "sonora",
         "hermosillo",
         "slrc",
         "san luis rio colorado",
@@ -114,8 +113,7 @@ def es_noticia_mexicali(titulo, link):
     ]
 
     for ciudad in excluir:
-        if ciudad in texto:
-            print(f"NO ES MEXICALI: {titulo}")
+        if ciudad in texto and "mexicali" not in texto:
             return False
 
     return any(clave in texto for clave in claves_mexicali)
@@ -147,7 +145,7 @@ def obtener_fecha_articulo(link):
         r = requests.get(link, headers=HEADERS, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")
 
-        posibles_metas = [
+        metas = [
             {"property": "article:published_time"},
             {"property": "article:modified_time"},
             {"name": "date"},
@@ -158,12 +156,10 @@ def obtener_fecha_articulo(link):
             {"itemprop": "dateModified"}
         ]
 
-        for meta_info in posibles_metas:
+        for meta_info in metas:
             meta = soup.find("meta", meta_info)
-
             if meta and meta.get("content"):
                 fecha = convertir_fecha(meta.get("content"))
-
                 if fecha:
                     return fecha
 
@@ -171,40 +167,43 @@ def obtener_fecha_articulo(link):
 
         for script in scripts:
             texto = script.get_text(" ", strip=True)
-            coincidencias = re.findall(r'"datePublished"\s*:\s*"([^"]+)"', texto)
+
+            coincidencias = re.findall(
+                r'"datePublished"\s*:\s*"([^"]+)"',
+                texto
+            )
 
             for fecha_texto in coincidencias:
                 fecha = convertir_fecha(fecha_texto)
-
                 if fecha:
                     return fecha
 
         return None
 
     except Exception as e:
-        print(f"No se pudo obtener fecha del artículo: {link} | {e}")
+        print(f"No se pudo leer fecha: {link} | {e}")
         return None
 
 
-def es_de_hoy(noticia):
-    fecha_articulo = obtener_fecha_articulo(noticia["link"])
+def es_publicada_hoy_o_principal(noticia):
+    fecha = obtener_fecha_articulo(noticia["link"])
+    hoy = datetime.now(TZ).date()
 
-    if not fecha_articulo:
-        print(f"SIN FECHA CONFIRMADA, SE OMITE: {noticia['titulo']}")
+    if fecha:
+        noticia["fecha"] = fecha
+
+        if fecha.date() == hoy:
+            return True
+
+        print(
+            f"OMITIDA POR FECHA VIEJA: {noticia['titulo']} | "
+            f"{fecha.strftime('%d/%m/%Y %I:%M %p')}"
+        )
+
         return False
 
-    hoy_mexicali = datetime.now(TZ).date()
-
-    if fecha_articulo.date() == hoy_mexicali:
-        noticia["fecha"] = fecha_articulo
-        return True
-
-    print(
-        f"NOTICIA VIEJA, SE OMITE: {noticia['titulo']} | "
-        f"Fecha artículo: {fecha_articulo.strftime('%d/%m/%Y %I:%M %p')}"
-    )
-
-    return False
+    print(f"SIN FECHA DETECTABLE, SE ACEPTA COMO PRINCIPAL: {noticia['titulo']}")
+    return True
 
 
 def eliminar_duplicados(lista):
@@ -234,11 +233,10 @@ def obtener_noticias():
 
     for orden_fuente, fuente in enumerate(FUENTES):
         try:
-            print(f"Leyendo principales noticias de: {fuente['nombre']}")
+            print(f"Leyendo: {fuente['nombre']}")
 
             r = requests.get(fuente["url"], headers=HEADERS, timeout=10)
             soup = BeautifulSoup(r.text, "html.parser")
-
             links = soup.find_all("a", href=True)
 
             for posicion, item in enumerate(links):
@@ -267,7 +265,6 @@ def obtener_noticias():
                 }
 
                 if noticia["link"] in data_enviadas["links"]:
-                    print(f"REPETIDA LINK: {titulo}")
                     continue
 
                 repetida = False
@@ -278,10 +275,9 @@ def obtener_noticias():
                         break
 
                 if repetida:
-                    print(f"REPETIDA TITULO: {titulo}")
                     continue
 
-                if not es_de_hoy(noticia):
+                if not es_publicada_hoy_o_principal(noticia):
                     continue
 
                 noticias.append(noticia)
@@ -321,7 +317,7 @@ def enviar_mensaje(texto):
 
 
 def main():
-    print("Buscando principales noticias de Mexicali del día actual...")
+    print("Buscando noticias publicadas hoy en diarios de Mexicali...")
 
     noticias = obtener_noticias()
 
@@ -334,7 +330,7 @@ def main():
     noticias_a_enviar = noticias_nuevas[:10]
 
     if not noticias_a_enviar:
-        print("No hay principales noticias nuevas de Mexicali de hoy. No se publica nada.")
+        print("No hay noticias nuevas para publicar. No se publica nada.")
         return
 
     ahora = datetime.now(TZ).strftime("%d/%m/%Y %I:%M %p")
@@ -342,11 +338,10 @@ def main():
     encabezado = (
         f"<b>MEXICALI NOTICIAS</b>\n"
         f"<b>Fecha y hora:</b> {ahora}\n"
-        f"<b>Cobertura:</b> Principales noticias de hoy"
+        f"<b>Cobertura:</b> Principales noticias publicadas hoy"
     )
 
     enviar_mensaje(encabezado)
-
     time.sleep(2)
 
     for i, noticia in enumerate(noticias_a_enviar, 1):
