@@ -20,6 +20,12 @@ FUENTES = [
     {"nombre": "La Crónica Mexicali", "url": "https://www.lacronica.com/mexicali/"}
 ]
 
+LIMITE_POR_FUENTE = {
+    "La Voz de la Frontera": 4,
+    "El Imparcial Mexicali": 3,
+    "La Crónica Mexicali": 3
+}
+
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 
 
@@ -161,7 +167,6 @@ def obtener_fecha_articulo(link):
 
             if meta and meta.get("content"):
                 fecha = convertir_fecha(meta.get("content"))
-
                 if fecha:
                     return fecha
 
@@ -169,15 +174,10 @@ def obtener_fecha_articulo(link):
 
         for script in scripts:
             texto = script.get_text(" ", strip=True)
-
-            coincidencias = re.findall(
-                r'"datePublished"\s*:\s*"([^"]+)"',
-                texto
-            )
+            coincidencias = re.findall(r'"datePublished"\s*:\s*"([^"]+)"', texto)
 
             for fecha_texto in coincidencias:
                 fecha = convertir_fecha(fecha_texto)
-
                 if fecha:
                     return fecha
 
@@ -202,7 +202,6 @@ def es_publicada_hoy_o_principal(noticia):
             f"OMITIDA POR FECHA VIEJA: {noticia['titulo']} | "
             f"{fecha.strftime('%d/%m/%Y %I:%M %p')}"
         )
-
         return False
 
     print(f"SIN FECHA DETECTABLE, SE ACEPTA COMO PRINCIPAL: {noticia['titulo']}")
@@ -231,10 +230,12 @@ def eliminar_duplicados(lista):
 
 
 def obtener_noticias():
-    noticias = []
+    noticias_finales = []
     data_enviadas = cargar_enviadas()
 
     for orden_fuente, fuente in enumerate(FUENTES):
+        noticias_fuente = []
+
         try:
             print(f"Leyendo: {fuente['nombre']}")
 
@@ -283,21 +284,17 @@ def obtener_noticias():
                 if not es_publicada_hoy_o_principal(noticia):
                     continue
 
-                noticias.append(noticia)
+                noticias_fuente.append(noticia)
 
         except Exception as e:
             print(f"Error en {fuente['nombre']}: {e}")
 
-    noticias = eliminar_duplicados(noticias)
+        noticias_fuente = eliminar_duplicados(noticias_fuente)
 
-    noticias.sort(
-        key=lambda n: (
-            n["orden_fuente"],
-            n["posicion"]
-        )
-    )
+        limite = LIMITE_POR_FUENTE.get(fuente["nombre"], 3)
+        noticias_finales.extend(noticias_fuente[:limite])
 
-    return noticias
+    return eliminar_duplicados(noticias_finales)
 
 
 def enviar_mensaje(texto):
@@ -330,9 +327,7 @@ def main():
         if not ya_fue_enviada(noticia):
             noticias_nuevas.append(noticia)
 
-    noticias_a_enviar = noticias_nuevas[:10]
-
-    if not noticias_a_enviar:
+    if not noticias_nuevas:
         print("No hay noticias nuevas para publicar. No se publica nada.")
         return
 
@@ -347,7 +342,7 @@ def main():
 
     time.sleep(2)
 
-    for noticia in noticias_a_enviar:
+    for noticia in noticias_nuevas:
         titulo = escapar_html(noticia["titulo"])
         fuente = escapar_html(noticia["fuente"])
         link = escapar_html(noticia["link"])
