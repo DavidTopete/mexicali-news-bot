@@ -1,7 +1,17 @@
 {
-  "ultima_ejecucion": null,
-  "ultimo_total_encontrado": 0,
-  "ultimo_total_enviado": 0,
-  "links": [],
-  "titulos": []
+  "ultima_ejecucion": "2026-08-27T10:03:08.750942-07:00",
+  "ultimo_total_encontrado": 4,
+  "ultimo_total_enviado": 4,
+  "links": [
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/mas-de-450-elementos-refuerzan-seguridad-en-mexicali-tras-amenaza-con-explosivos/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/emite-mexicali-alerta-por-calor-extremo-se-esperan-45c-y-sensacion-de-48c-con-posibilidad-de-llovizna/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/sanfelipenses-conquistan-el-mundo-en-el-remo/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/cachanillas-conquistan-el-nacional-de-futbol-en-quintana-roo/"
+  ],
+  "titulos": [
+    "Emite Mexicali alerta por calor extremo; se esperan 45°C y sensación de 48°C con posibilidad de llovizna",
+    "Oro y bronce para San Felipe: Aylin Ibarra y Alexis López brillan en el Mundial de Remo",
+    "Siete partidos con cero goles: nueve cachanillas son campeones nacionales de fútbol",
+    "Más de 450 elementos refuerzan seguridad en Mexicali tras amenaza con explosivos"
+  ]
 }
