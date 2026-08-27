@@ -1,7 +1,29 @@
 {
-  "ultima_ejecucion": null,
-  "ultimo_total_encontrado": 0,
-  "ultimo_total_enviado": 0,
-  "links": [],
-  "titulos": []
+  "ultima_ejecucion": "2026-08-27T13:02:25.304144-07:00",
+  "ultimo_total_encontrado": 10,
+  "ultimo_total_enviado": 10,
+  "links": [
+    "https://oem.com.mx/lavozdelafrontera/local/alerta-en-mexicali-fue-por-amenaza-de-explosivos-en-fgr-y-dspm-sscbc-31750474",
+    "https://oem.com.mx/lavozdelafrontera/local/alerta-condado-de-imperial-por-ola-de-calor-en-mexicali-y-calexico-hay-posibilidad-de-tormenta-electrica-este-miercoles-31749206",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/sanfelipenses-conquistan-el-mundo-en-el-remo/",
+    "https://www.elimparcial.com/mxl/policiaca/2026/08/27/comando-norte-de-eu-reconoce-golpe-a-los-rusos-en-mexicali-tras-decomiso-de-120-kilos-de-fentanilo/",
+    "https://oem.com.mx/lavozdelafrontera/deportes/se-acabo-la-racha-de-victorias-de-soles-de-mexicali-31749581",
+    "https://www.elimparcial.com/mxl/policiaca/2026/08/27/por-tener-13-anos-adolescente-senalado-por-brutal-homicidio-de-conductor-de-didi-en-mexicali-no-fue-presentado-ante-un-juez/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/baja-california-suma-49-muertes-por-golpe-de-calor-mexicali-concentra-47/",
+    "https://oem.com.mx/lavozdelafrontera/local/han-retirado-17-visas-a-transportistas-por-cabotaje-en-garita-comercial-de-mexicali-31752252",
+    "https://oem.com.mx/lavozdelafrontera/local/suspenden-clases-en-uabc-mexicali-tras-apagon-31757304",
+    "https://oem.com.mx/lavozdelafrontera/deportes/cachanillas-caen-en-juego-amistoso-31714470"
+  ],
+  "titulos": [
+    "Por tener 13 años, adolescente señalado por brutal homicidio de conductor de DiDi en Mexicali no fue presentado ante un juez",
+    "Baja California suma 49 muertes por golpe de calor; Mexicali concentra 47",
+    "Comando Norte de EU reconoce golpe a “Los Rusos” en Mexicali tras decomiso de 120 kilos de fentanilo",
+    "Oro y bronce para San Felipe: Aylin Ibarra y Alexis López brillan en el Mundial de Remo",
+    "Suspenden clases en UABC Mexicali tras apagón",
+    "Han retirado 17 visas a transportistas por cabotaje en garita comercial de Mexicali",
+    "Alerta en Mexicali fue por amenaza de explosivos en FGR y DSPM: SSCBC",
+    "Se acabó la racha de victorias de Soles de Mexicali",
+    "Alerta Condado de Imperial por ola de calor; en Mexicali y Calexico hay posibilidad de tormenta eléctrica este miércoles",
+    "Cachanillas caen en juego amistoso"
+  ]
 }
