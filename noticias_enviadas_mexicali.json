@@ -1,7 +1,29 @@
 {
-  "ultima_ejecucion": null,
-  "ultimo_total_encontrado": 0,
-  "ultimo_total_enviado": 0,
-  "links": [],
-  "titulos": []
+  "ultima_ejecucion": "2026-08-27T11:57:36.989083-07:00",
+  "ultimo_total_encontrado": 10,
+  "ultimo_total_enviado": 10,
+  "links": [
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/semana-del-rock-busca-recuperar-la-memoria-de-una-escena-que-puso-a-mexicali-en-el-mapa-internacional/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/mexicali-prepara-su-propio-disneylandia-para-los-corredores/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/emite-mexicali-alerta-por-calor-extremo-se-esperan-45c-y-sensacion-de-48c-con-posibilidad-de-llovizna/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/cachanillas-conquistan-el-nacional-de-futbol-en-quintana-roo/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/sanfelipenses-conquistan-el-mundo-en-el-remo/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/mas-de-450-elementos-refuerzan-seguridad-en-mexicali-tras-amenaza-con-explosivos/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/dron-y-equipo-de-rescate-localizan-a-hombre-perdido-durante-una-emergencia-medica-en-el-condado-imperial/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/abren-mas-de-1-mil-400-expedientes-contra-policias-municipales/",
+    "https://www.elimparcial.com/mxl/policiaca/2026/08/27/comando-norte-de-eu-reconoce-golpe-a-los-rusos-en-mexicali-tras-decomiso-de-120-kilos-de-fentanilo/",
+    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/baja-california-suma-49-muertes-por-golpe-de-calor-mexicali-concentra-47/"
+  ],
+  "titulos": [
+    "Baja California suma 49 muertes por golpe de calor; Mexicali concentra 47",
+    "Comando Norte de EU reconoce golpe a “Los Rusos” en Mexicali tras decomiso de 120 kilos de fentanilo",
+    "Oro y bronce para San Felipe: Aylin Ibarra y Alexis López brillan en el Mundial de Remo",
+    "Siete partidos con cero goles: nueve cachanillas son campeones nacionales de fútbol",
+    "Emite Mexicali alerta por calor extremo; se esperan 45°C y sensación de 48°C con posibilidad de llovizna",
+    "Abren más de 1 mil 400 expedientes contra policías",
+    "Más de 450 elementos refuerzan seguridad en Mexicali tras amenaza con explosivos",
+    "Dron y equipo de rescate localizan a hombre",
+    "Semana del Rock busca recuperar la memoria",
+    "Mexicali prepara su propio ‘Disneylandia’ para los corredores"
+  ]
 }
