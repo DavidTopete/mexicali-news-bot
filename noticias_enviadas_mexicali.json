@@ -1,37 +1,7 @@
 {
-  "ultima_ejecucion": "2026-08-27T11:52:39.158264-07:00",
-  "ultimo_total_encontrado": 10,
-  "ultimo_total_enviado": 10,
-  "links": [
-    "https://www.elimparcial.com/mxl/policiaca/2026/08/25/mantendran-operativos-y-reforzamientos-de-seguridad-ante-posibles-amenazas-en-mexicali-tras-alerta-emitida-por-eeuu/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/25/mexicali-no-da-tregua-al-calor-inicia-nueva-ola-tras-terminar-la-canicula/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/sanfelipenses-conquistan-el-mundo-en-el-remo/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/baja-california-suma-49-muertes-por-golpe-de-calor-mexicali-concentra-47/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/abren-mas-de-1-mil-400-expedientes-contra-policias-municipales/",
-    "https://www.elimparcial.com/mxl/policiaca/2026/08/25/los-rusos-habrian-planeado-atentado-con-explosivos-en-mexicali-sscbc/",
-    "https://www.elimparcial.com/mxl/policiaca/2026/08/27/comando-norte-de-eu-reconoce-golpe-a-los-rusos-en-mexicali-tras-decomiso-de-120-kilos-de-fentanilo/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/cachanillas-conquistan-el-nacional-de-futbol-en-quintana-roo/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/mas-de-450-elementos-refuerzan-seguridad-en-mexicali-tras-amenaza-con-explosivos/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/mexicali-prepara-su-propio-disneylandia-para-los-corredores/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/dron-y-equipo-de-rescate-localizan-a-hombre-perdido-durante-una-emergencia-medica-en-el-condado-imperial/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/26/semana-del-rock-busca-recuperar-la-memoria-de-una-escena-que-puso-a-mexicali-en-el-mapa-internacional/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/25/recicladora-de-pavimento-saldra-de-mexicali-por-el-calor-preven-su-regreso-en-octubre/",
-    "https://www.elimparcial.com/mxl/mexicali/2026/08/27/emite-mexicali-alerta-por-calor-extremo-se-esperan-45c-y-sensacion-de-48c-con-posibilidad-de-llovizna/"
-  ],
-  "titulos": [
-    "Emite Mexicali alerta por calor extremo; se esperan 45°C y sensación de 48°C con posibilidad de llovizna",
-    "Oro y bronce para San Felipe: Aylin Ibarra y Alexis López brillan en el Mundial de Remo",
-    "Siete partidos con cero goles: nueve cachanillas son campeones nacionales de fútbol",
-    "Más de 450 elementos refuerzan seguridad en Mexicali tras amenaza con explosivos",
-    "Baja California suma 49 muertes por golpe de calor; Mexicali concentra 47",
-    "Comando Norte de EU reconoce golpe a “Los Rusos” en Mexicali tras decomiso de 120 kilos de fentanilo",
-    "Abren más de 1 mil 400 expedientes contra policías",
-    "Dron y equipo de rescate localizan a hombre",
-    "Semana del Rock busca recuperar la memoria",
-    "Mexicali prepara su propio ‘Disneylandia’ para los corredores",
-    "“Los Rusos” habrían planeado atentado",
-    "Refuerzan seguridad en Mexicali tras alerta de EE.UU",
-    "Recicladora de pavimento saldrá de Mexicali por el calor",
-    "Mexicali no da tregua al calor"
-  ]
+  "ultima_ejecucion": null,
+  "ultimo_total_encontrado": 0,
+  "ultimo_total_enviado": 0,
+  "links": [],
+  "titulos": []
 }
