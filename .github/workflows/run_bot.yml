@@ -2,10 +2,8 @@ name: Run Mexicali News Bot
 
 on:
   schedule:
-    # Ajusta el horario si ya tienes uno diferente.
-    # 04:00 AM Mexicali normalmente corresponde a UTC-7 o UTC-8
-    # según horario estacional. Este ejemplo usa 12:00 UTC.
-    - cron: '0 12 * * *'
+    # 04:00 AM Mexicali = 11:00 UTC cuando Mexicali está en UTC-7
+    - cron: '0 11 * * *'
 
   workflow_dispatch:
 
