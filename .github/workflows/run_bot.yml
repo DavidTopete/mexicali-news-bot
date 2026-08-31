@@ -2,9 +2,12 @@ name: Run Mexicali News Bot
 
 on:
   schedule:
-    # 04:00 AM Mexicali = 11:00 UTC cuando Mexicali está en UTC-7
-    - cron: '0 11 * * *'
+    # 04:17 AM Mexicali = 11:17 UTC cuando Mexicali está en UTC-7.
+    # Se usa el minuto :17 para reducir retrasos de GitHub Actions
+    # que suelen ocurrir al inicio de cada hora.
+    - cron: '17 11 * * *'
 
+  # Permite ejecutar manualmente desde GitHub Actions
   workflow_dispatch:
 
 permissions:
@@ -19,31 +22,69 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ======================================================
+      # 1. DESCARGAR REPOSITORIO
+      # ======================================================
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+
+      # ======================================================
+      # 2. CONFIGURAR PYTHON
+      # ======================================================
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+
+      # ======================================================
+      # 3. MOSTRAR HORA DEL RUNNER
+      # ======================================================
+      - name: Show execution time
+        run: |
+          echo "========================================"
+          echo "GitHub Actions execution time"
+          echo "========================================"
+          echo "UTC:"
+          date -u
+          echo ""
+          echo "Runner local time:"
+          date
+          echo "========================================"
+
+
+      # ======================================================
+      # 4. INSTALAR DEPENDENCIAS
+      # ======================================================
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 pillow
 
-      - name: Run bot
+
+      # ======================================================
+      # 5. EJECUTAR BOT
+      # ======================================================
+      - name: Run Mexicali News Bot
         run: python telegram_bot.py
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
 
+
+      # ======================================================
+      # 6. GUARDAR HISTORIAL DE NOTICIAS
+      # ======================================================
       - name: Save bot history
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "Checking noticias_enviadas_mexicali.json..."
 
           git add noticias_enviadas_mexicali.json
 
@@ -52,7 +93,13 @@ jobs:
             exit 0
           fi
 
+          echo "Changes detected."
           git commit -m "Update noticias_enviadas_mexicali.json"
 
+          echo "Updating local repository..."
           git pull --rebase origin main
+
+          echo "Pushing updated history..."
           git push origin HEAD:main
+
+          echo "Bot history successfully updated."
