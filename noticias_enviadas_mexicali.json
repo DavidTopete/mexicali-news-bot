@@ -1,7 +1,29 @@
 {
-  "ultima_ejecucion": null,
-  "ultimo_total_encontrado": 0,
-  "ultimo_total_enviado": 0,
-  "links": [],
-  "titulos": []
+  "ultima_ejecucion": "2026-10-05T08:55:57.011998-07:00",
+  "ultimo_total_encontrado": 10,
+  "ultimo_total_enviado": 10,
+  "links": [
+    "https://oem.com.mx/lavozdelafrontera/policiaca/capturan-y-vinculan-a-proceso-a-presunto-pederasta-en-mexicali-32415870",
+    "https://oem.com.mx/lavozdelafrontera/deportes/llega-zac-rosscup-exjugador-de-grande-ligas-a-los-aguilas-de-mexicali-32382993",
+    "https://oem.com.mx/lavozdelafrontera/deportes/cachanilla-apunta-a-campeonato-mundial-juvenil-32379017",
+    "https://www.elimparcial.com/mxl/mexicali/2026/10/04/de-las-luces-de-las-fiestas-a-la-esperanza-contra-el-cancer-y-las-historias-de-nuestra-ciudad-estas-son-las-fotos-de-la-semana/",
+    "https://oem.com.mx/lavozdelafrontera/deportes/corren-en-apoyo-a-la-mujer-cachanilla-32427306",
+    "https://www.elimparcial.com/mxl/mexicali/2026/10/04/regresa-el-calor-intenso-a-mexicali-alcanzara-los-41-grados-esta-semana/",
+    "https://oem.com.mx/lavozdelafrontera/deportes/investigara-cmb-la-muerte-del-boxeador-cachanilla-arturo-lobito-torres-32365381",
+    "https://www.elimparcial.com/mxl/mexicali/2026/10/04/garitas-mexicali-calexico-tiempos-de-espera-este-domingo/",
+    "https://oem.com.mx/lavozdelafrontera/policiaca/caen-dos-presuntos-integrantes-de-los-rusos-en-el-valle-de-mexicali-32364771",
+    "https://www.elimparcial.com/mxl/mexicali/2026/10/03/incendio-en-edificios-abandonados-de-infonavit-cucapah-rescatan-a-tres-personas-del-techo/"
+  ],
+  "titulos": [
+    "Regresa el calor intenso a Mexicali",
+    "De las luces de las Fiestas a la esperanza contra el cáncer y las historias de nuestra ciudad, estas son las Fotos de la Semana",
+    "Corren en apoyo a la mujer cachanilla",
+    "Garitas Mexicali-Calexico: tiempos de espera este domingo",
+    "Incendio en Infonavit Cucapah deja a tres personas atrapadas",
+    "Capturan y vinculan a proceso a presunto pederasta en Mexicali",
+    "Llega Zac Rosscup exjugador de Grande Ligas a Los Águilas de Mexicali",
+    "Cachanilla apunta a campeonato mundial juvenil",
+    "Investigará CMB la muerte del boxeador cachanilla Arturo “Lobito” Torres",
+    "Caen dos presuntos integrantes de Los Rusos en el Valle de Mexicali"
+  ]
 }
